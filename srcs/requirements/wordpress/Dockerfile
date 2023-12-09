@@ -4,10 +4,16 @@ RUN apt-get update && apt-get -y install \
  wget \
  curl \
  bash \
- php \
- php-cgi \
- php-mysql \
- php-fpm \
+ php7.3 \
+ php7.3-cgi \
+ php7.3-mysql \
+ php7.3-fpm \
+ php7.3-pdo \
+ php7.3-gd \
+ php7.3-cli \
+ php7.3-mbstring \
+ redis-server \
+ php-redis \
  && rm -rf /var/lib/apt/lists/*
 
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
