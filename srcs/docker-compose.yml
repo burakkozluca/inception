@@ -1,0 +1,58 @@
+version: '3'
+# Services -> containerlari tanimlar
+services:
+   # MariaDB Service
+   mariadb:
+      container_name: mariadb
+      build: ./requirements/mariadb
+      networks:
+         - app-network
+      restart: always
+      volumes:
+         - DB:/var/lib/mysql 
+      env_file:
+         - .env
+   nginx:
+      container_name: nginx
+      build: ./requirements/nginx
+      ports:
+         - "443:443"
+      volumes:
+         - WordPress:/var/www/wordpress
+      networks:
+         - app-network
+      depends_on:
+         - wordpress
+      restart: always
+   wordpress:
+      container_name: wordpress
+      depends_on:
+         - mariadb
+      volumes:
+         - WordPress:/var/www/wordpress
+      build: 
+         context: ./requirements/wordpress
+         dockerfile: Dockerfile
+      restart: always
+      env_file:
+         - .env
+      networks:
+         - app-network 
+      
+# Container'lar arasindaki ag baglantilarini tanimlar.
+networks:
+   app-network:
+      driver: bridge
+volumes:
+   WordPress:
+      driver: local
+      driver_opts:
+         type: 'none'
+         o: 'bind'
+         device: '/home/bkozluca/data/wordpress'
+   DB:
+      driver: local
+      driver_opts:
+         type: 'none'
+         o: 'bind'
+         device: '/home/bkozluca/data/mariadb'
